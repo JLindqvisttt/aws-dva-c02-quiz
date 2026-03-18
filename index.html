@@ -386,7 +386,7 @@ function buildStudyCards() {
       '<div class="service-header"><span class="service-emoji">'+s.emoji+'</span><span class="service-name">'+escHtml(s.name)+'</span></div>' +
       '<div class="service-desc">'+escHtml(s.desc)+'</div>' +
       '<ul class="service-bullets">'+bulletsHtml+'</ul>' +
-      '<button class="btn btn-primary btn-sm" onclick="startTopicQuiz(''+s.name.replace(/'/g,"\\'")+'')" >Practice '+escHtml(s.name)+' Questions</button>' +
+      '<button class="btn btn-primary btn-sm" onclick="startTopicQuiz(s.name.replace(/\'/g, '\\\''))">Practice '+escHtml(s.name)+' Questions</button>' +
       '</div>';
   }).join('');
 }
