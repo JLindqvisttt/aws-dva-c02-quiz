@@ -1,0 +1,57 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Feedback endpoint that forwards messages to Slack webhook
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    Timeout: 10
+    MemorySize: 256
+
+Parameters:
+  SlackWebhookUrl:
+    Type: String
+    NoEcho: true
+    Description: Slack incoming webhook URL
+  FeedbackToken:
+    Type: String
+    Default: ''
+    NoEcho: true
+    Description: Optional shared token for x-feedback-token header
+
+Resources:
+  FeedbackApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowMethods: [POST, OPTIONS]
+        AllowHeaders: [Content-Type, x-feedback-token]
+        AllowOrigins: ['*']
+
+  FeedbackFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      CodeUri: .
+      Environment:
+        Variables:
+          SLACK_WEBHOOK_URL: !Ref SlackWebhookUrl
+          FEEDBACK_TOKEN: !Ref FeedbackToken
+      Events:
+        FeedbackPost:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref FeedbackApi
+            Path: /feedback
+            Method: POST
+        FeedbackOptions:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref FeedbackApi
+            Path: /feedback
+            Method: OPTIONS
+
+Outputs:
+  FeedbackApiUrl:
+    Value: !Sub 'https://${FeedbackApi}.execute-api.${AWS::Region}.amazonaws.com/feedback'
+    Description: API endpoint URL

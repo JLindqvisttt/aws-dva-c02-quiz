@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS SAA-C03 Study Platform</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+.nav-back{background:none;border:none;color:var(--text2);padding:14px 10px 14px 0;cursor:pointer;font-size:0.8rem;font-weight:500;display:inline-flex;align-items:center;gap:5px;transition:var(--transition);text-decoration:none;white-space:nowrap}
+.nav-back:hover{color:var(--accent)}
+</style>
+<script>(function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+</head>
+<body>
+
+<nav>
+  <a class="nav-back" href="index.html" title="All certifications">&#x2190; Portal</a>
+  <div class="nav-logo">&#x2601; AWS <span>Solutions Architect Associate</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-tab="home">&#x1F3E0; Home</button>
+    <button class="nav-tab" data-tab="study">&#x1F4DA; Study</button>
+    <button class="nav-tab" data-tab="quiz">&#x1F3AF; Quiz</button>
+    <button class="nav-tab" data-tab="flash">&#x1F0CF; Flashcards</button>
+  </div>
+  <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">🌙</button>
+</nav>
+
+<main>
+  <!-- HOME -->
+  <div id="tab-home" class="tab-panel active">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-val" id="stat-total">0</div><div class="stat-lbl">Total Questions</div></div>
+      <div class="stat-card"><div class="stat-val" id="stat-topics">0</div><div class="stat-lbl">Topics Practiced</div></div>
+      <div class="stat-card"><div class="stat-val" id="stat-mastery">0%</div><div class="stat-lbl">Mastery</div></div>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-weight:600">Progress</span>
+        <span id="stat-mastered-text" class="text-muted">0 mastered</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="home-progress-fill" style="width:0%"></div></div>
+    </div>
+    <div class="home-actions">
+      <div class="action-card">
+        <div class="action-emoji">&#x1F3AF;</div>
+        <div class="action-title">Quick Quiz</div>
+        <div class="action-desc">Random questions with immediate feedback</div>
+        <div style="margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+          <button class="btn btn-primary btn-sm" onclick="startQuickQuiz(10)">10 Qs</button>
+          <button class="btn btn-primary btn-sm" onclick="startQuickQuiz(20)">20 Qs</button>
+          <button class="btn btn-primary btn-sm" onclick="startQuickQuiz(30)">30 Qs</button>
+        </div>
+      </div>
+      <div class="action-card" onclick="startExamSim()">
+        <div class="action-emoji">&#x1F4DD;</div>
+        <div class="action-title">Exam Simulation</div>
+        <div class="action-desc" id="exam-sim-desc">65 questions &middot; 130 minute timer &middot; Feedback at end</div>
+      </div>
+      <div class="action-card" onclick="goTab('study')">
+        <div class="action-emoji">&#x1F4DA;</div>
+        <div class="action-title">Study by Topic</div>
+        <div class="action-desc">Review AWS services, then practice topic-specific questions</div>
+      </div>
+      <div class="action-card" onclick="startWeakAreas()">
+        <div class="action-emoji">&#x26A0;</div>
+        <div class="action-title">Weak Areas</div>
+        <div class="action-desc">Focus on questions you've answered incorrectly before</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STUDY -->
+  <div id="tab-study" class="tab-panel">
+    <h2 class="section-title">AWS Services <span class="hl">Study Guide</span></h2>
+    <div class="service-grid" id="service-grid"></div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="tab-quiz" class="tab-panel">
+    <div id="quiz-setup-screen" class="quiz-setup">
+      <h2>Configure Your Quiz</h2>
+      <div class="option-group">
+        <label>Mode</label>
+        <div class="option-pills">
+          <div class="pill selected" data-group="mode" data-val="study">&#x1F4D6; Study (immediate feedback)</div>
+          <div class="pill" data-group="mode" data-val="exam">&#x1F4DD; Exam (feedback at end)</div>
+        </div>
+      </div>
+      <div class="option-group">
+        <label>Question Count</label>
+        <div class="option-pills">
+          <div class="pill selected" data-group="count" data-val="10">10</div>
+          <div class="pill" data-group="count" data-val="20">20</div>
+          <div class="pill" data-group="count" data-val="30">30</div>
+          <div class="pill" data-group="count" data-val="65">65</div>
+          <div class="pill" data-group="count" data-val="all">All</div>
+        </div>
+      </div>
+      <div class="option-group">
+        <label>Topic</label>
+        <div class="option-pills" id="topic-pills">
+          <div class="pill selected" data-group="topic" data-val="all">All Topics</div>
+        </div>
+      </div>
+      <div class="option-group">
+        <label>Filter</label>
+        <div class="option-pills">
+          <div class="pill selected" data-group="filter" data-val="all">All Questions</div>
+          <div class="pill" data-group="filter" data-val="weak">&#x26A0; Weak Areas Only</div>
+        </div>
+      </div>
+      <button class="btn btn-primary mt-24" style="width:100%;padding:14px;font-size:1rem" onclick="startConfiguredQuiz()">Start Quiz &#x2192;</button>
+    </div>
+    <div id="quiz-active-screen" style="display:none"></div>
+    <div id="quiz-result-screen" style="display:none"></div>
+  </div>
+
+  <!-- FLASHCARDS -->
+  <div id="tab-flash" class="tab-panel">
+    <div class="flash-controls">
+      <h2 class="section-title" style="margin-bottom:0">Flashcards</h2>
+      <select class="topic-select" id="flash-topic-filter" onchange="initFlashcards()">
+        <option value="all">All Topics</option>
+      </select>
+      <span id="flash-count-badge" class="badge-pill">0 cards</span>
+    </div>
+    <div class="flash-wrap">
+      <div class="flash-card" id="flash-card" onclick="flipCard()">
+        <div class="flash-face flash-front">
+          <div class="flash-q" id="flash-front-text">Loading...</div>
+          <div class="flash-hint">Click to reveal answer</div>
+        </div>
+        <div class="flash-face flash-back">
+          <div class="flash-a" id="flash-back-text"></div>
+          <div class="flash-hint">Click to flip back</div>
+        </div>
+      </div>
+    </div>
+    <div class="flash-nav">
+      <button class="btn" onclick="flashPrev()">&#x2190; Previous</button>
+      <span class="flash-counter" id="flash-counter">1 / ?</span>
+      <button class="btn" onclick="flashNext()">Next &#x2192;</button>
+    </div>
+  </div>
+</main>
+
+<!-- Info Modal -->
+<div class="modal-overlay hidden" id="info-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-desc" id="modal-desc"></div>
+    <a class="modal-link" id="modal-link" href="#" target="_blank">&#x1F4D6; AWS Documentation &#x2192;</a>
+  </div>
+</div>
+
+<script src="questions-saa-c03.js"></script>
+<script src="app.js"></script>
+<script>
+const _esd = document.getElementById('exam-sim-desc');
+if (_esd && typeof CERT_META !== 'undefined') {
+  _esd.innerHTML = CERT_META.examQuestions + ' questions &middot; ' + CERT_META.minutes + ' minute timer &middot; Feedback at end';
+}
+</script>
+</body>
+</html>
