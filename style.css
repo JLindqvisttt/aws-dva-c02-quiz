@@ -26,20 +26,27 @@ nav{background:var(--card);border-bottom:1px solid var(--border);position:sticky
 .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 .theme-toggle{background:var(--btn);border:1px solid var(--border);color:var(--text2);width:36px;height:36px;border-radius:10px;cursor:pointer;font-size:1rem;display:inline-flex;align-items:center;justify-content:center;line-height:1;transition:var(--transition);flex-shrink:0}
 .theme-toggle:hover{border-color:var(--accent);color:var(--accent)}
-.nav-badge-img{width:32px;height:24px;max-width:32px;max-height:24px;object-fit:contain;vertical-align:middle;margin-right:6px;flex-shrink:0}
-[data-theme="dark"] .nav-badge-img{mix-blend-mode:screen}
-[data-theme="light"] .nav-badge-img{mix-blend-mode:multiply}
-.cert-pg-hero{display:flex;align-items:center;gap:20px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-.cert-pg-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(240,150,42,0.06) 0%,transparent 55%);pointer-events:none}
-.cert-pg-hero::after{content:'';position:absolute;top:-60px;right:-60px;width:230px;height:230px;border-radius:50%;background:radial-gradient(circle,rgba(240,150,42,0.1) 0%,transparent 70%);pointer-events:none}
-.cert-pg-badge{width:96px;height:auto;flex-shrink:0;position:relative;z-index:1}
-[data-theme="dark"] .cert-pg-badge{mix-blend-mode:screen}
-[data-theme="light"] .cert-pg-badge{mix-blend-mode:multiply}
-.cert-pg-info{flex:1;min-width:0;position:relative;z-index:1}
-.cert-pg-level{display:inline-block;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;background:var(--accent);color:#111;padding:2px 9px;border-radius:999px;margin-bottom:8px}
-.cert-pg-code{font-size:1.6rem;font-weight:900;letter-spacing:-1px;line-height:1.1}
-.cert-pg-name{font-size:0.85rem;color:var(--text2);margin-top:4px}
-@media(max-width:560px){.cert-pg-hero{gap:14px;padding:16px}.cert-pg-badge{width:64px}.cert-pg-code{font-size:1.2rem}}
+/* ── Cert page hero banner (full-width, outside main) ────── */
+.cert-hero-banner{width:100%;background:linear-gradient(180deg,color-mix(in srgb,var(--cert-color,var(--accent)) 14%,var(--bg)) 0%,var(--bg) 100%);padding:28px 20px 32px}
+.cert-hero-inner{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:24px}
+.cert-pg-badge-wrap{width:100px;height:100px;border-radius:18px;flex-shrink:0;background:color-mix(in srgb,var(--cert-color,var(--accent)) 22%,var(--card));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px color-mix(in srgb,var(--cert-color,var(--accent)) 35%,transparent)}
+.cert-pg-badge{width:82%;height:82%;object-fit:contain}
+.cert-pg-info{flex:1;min-width:0}
+.cert-pg-level{display:inline-block;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;background:var(--cert-color,var(--accent));color:#fff;padding:3px 10px;border-radius:999px;margin-bottom:8px}
+.cert-pg-code{font-size:1.8rem;font-weight:900;letter-spacing:-1.5px;line-height:1}
+.cert-pg-name{font-size:0.9rem;color:var(--text2);margin-top:6px}
+/* ── Cert-page color overrides (driven by --cert-color) ─── */
+.cert-page .nav-title-cert{color:var(--cert-color,var(--accent))}
+.cert-page .nav-tab.active{color:var(--cert-color,var(--accent));border-bottom-color:var(--cert-color,var(--accent))}
+.cert-page .stat-card{border-top-color:var(--cert-color,var(--accent))}
+.cert-page .stat-val{color:var(--cert-color,var(--accent))}
+.cert-page .progress-fill{background:linear-gradient(90deg,var(--cert-color,var(--accent)),color-mix(in srgb,var(--cert-color,var(--accent)) 65%,#fff))}
+.cert-page .btn-primary{background:var(--cert-color,var(--accent));border-color:var(--cert-color,var(--accent));color:#fff}
+.cert-page .btn-primary:hover{background:color-mix(in srgb,var(--cert-color,var(--accent)) 80%,#000);border-color:color-mix(in srgb,var(--cert-color,var(--accent)) 80%,#000)}
+.cert-page .action-card:hover{border-color:var(--cert-color,var(--accent));border-top-color:var(--cert-color,var(--accent))}
+.cert-page .pill.selected{background:var(--cert-color,var(--accent));border-color:var(--cert-color,var(--accent))}
+.cert-page .nav-tab:hover{color:var(--cert-color,var(--accent))}
+@media(max-width:560px){.cert-hero-banner{padding:20px 12px 24px}.cert-pg-badge-wrap{width:72px;height:72px;border-radius:12px}.cert-pg-code{font-size:1.4rem}}
 main{flex:1;padding:24px 20px;max-width:920px;margin:0 auto;width:100%}
 .tab-panel{display:none}
 .tab-panel.active{display:block}
