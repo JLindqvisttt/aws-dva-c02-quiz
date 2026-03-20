@@ -7,7 +7,11 @@
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style>
-.portal-hero{text-align:center;padding:44px 24px 16px}
+.portal-hero{text-align:center;padding:44px 24px 16px;position:relative;overflow:hidden}
+.portal-hero::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(240,150,42,0.08) 0%,transparent 65%);animation:heroFloat 14s ease-in-out infinite;top:-320px;left:-180px;pointer-events:none;z-index:0}
+.portal-hero::after{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(240,150,42,0.05) 0%,transparent 65%);animation:heroFloat 14s ease-in-out infinite 7s reverse;bottom:-220px;right:-80px;pointer-events:none;z-index:0}
+.portal-hero > *{position:relative;z-index:1}
+@keyframes heroFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(120px,80px) scale(1.15)}66%{transform:translate(60px,-60px) scale(0.9)}}
 .portal-hero h1{font-size:2rem;font-weight:800;margin:0 0 10px;letter-spacing:-0.8px}
 .portal-hero h1 span{color:var(--accent)}
 .portal-hero p{color:var(--text2);font-size:1rem;margin:0}
@@ -30,11 +34,20 @@
 .cert-qcount{font-size:0.8rem;color:var(--text2)}
 .cert-cta{background:var(--cert-color);color:#fff;border-radius:6px;padding:7px 16px;font-size:0.85rem;font-weight:600;white-space:nowrap;display:inline-block;transition:var(--transition)}
 .cert-card:hover .cert-cta{opacity:.85}
-.cert-progress-wrap{margin-bottom:4px}
-.cert-progress-label{display:flex;justify-content:space-between;font-size:0.78rem;color:var(--text2);margin-bottom:5px}
-.cert-progress-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
-.cert-progress-fill{height:100%;background:var(--cert-color);border-radius:3px;transition:width .5s}
+.cert-progress-wrap{margin-bottom:12px}
+.prog-ring-row{display:flex;align-items:center;gap:14px}
+.prog-ring-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;flex-shrink:0}
+.prog-ring{display:block}
+.prog-ring-bg{fill:none;stroke:var(--border);stroke-width:3.5}
+.prog-ring-fill{fill:none;stroke-width:3.5;stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 0.9s ease}
+.prog-ring-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.prog-ring-pct{font-size:0.66rem;font-weight:800;color:var(--text);line-height:1.1}
+.prog-ring-labels{display:flex;flex-direction:column;gap:3px}
+.prog-ring-count{font-size:0.82rem;font-weight:700;color:var(--text)}
+.prog-ring-sub{font-size:0.7rem;color:var(--text2)}
 .cert-card.coming-soon{opacity:.65}
+:root .cert-card{background:color-mix(in srgb, var(--cert-color) 5%, var(--card))}
+[data-theme="light"] .cert-card{background:var(--card)}
 .coming-soon-badge{position:absolute;top:14px;right:14px;font-size:0.7rem;font-weight:700;background:var(--border);color:var(--text2);padding:2px 8px;border-radius:20px}
 .level-filter-bar{display:flex;justify-content:center;gap:8px;padding:16px 20px 22px;flex-wrap:wrap}
 .level-pill{background:var(--card);border:1.5px solid var(--border);color:var(--text2);padding:6px 18px;border-radius:999px;cursor:pointer;font-size:0.82rem;font-weight:600;transition:var(--transition);white-space:nowrap}
@@ -52,6 +65,7 @@
   .cert-card{padding:16px}
   .cert-code{font-size:1.2rem}
   .cert-badge-img{width:52px}
+  .prog-ring-wrap,.prog-ring{width:44px;height:44px}
   .cert-footer{flex-wrap:wrap}
 }
 </style>
@@ -120,7 +134,7 @@ function buildCards(){
     var prog=readProgress(cert.id);
     var pct=cert.total>0?Math.round((prog.mastered/cert.total)*100):0;
     var topics=cert.topics.map(function(t){return '<span class="cert-topic">'+t+'</span>';}).join('');
-    var progressHtml=cert.built?('<div class="cert-progress-wrap"><div class="cert-progress-label"><span>Mastery</span><span>'+prog.mastered+' / '+cert.total+'</span></div><div class="cert-progress-bar"><div class="cert-progress-fill" style="width:'+pct+'%"></div></div></div>'):'';
+    var C=106.81;var progressHtml=cert.built?('<div class="cert-progress-wrap"><div class="prog-ring-row"><div class="prog-ring-wrap"><svg class="prog-ring" width="52" height="52" viewBox="0 0 52 52"><circle class="prog-ring-bg" cx="26" cy="26" r="17"/><circle class="prog-ring-fill" cx="26" cy="26" r="17" style="stroke:'+cert.color+';stroke-dasharray:'+C+';stroke-dashoffset:'+(C*(1-pct/100)).toFixed(2)+'"/></svg><div class="prog-ring-inner"><span class="prog-ring-pct">'+pct+'%</span></div></div><div class="prog-ring-labels"><span class="prog-ring-count">'+prog.mastered+' / '+cert.total+'</span><span class="prog-ring-sub">questions mastered</span></div></div></div>'):'';
     html+='<a class="cert-card'+(cert.built?'':' coming-soon')+'" href="'+cert.href+'" style="--cert-color:'+cert.color+'">'+
       (!cert.built?'<span class="coming-soon-badge">Coming Soon</span>':'')+
       '<div class="cert-header">'+
