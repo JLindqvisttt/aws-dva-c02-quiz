@@ -6,24 +6,22 @@
 <title>AWS SCS-C02 Study Platform</title>
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<style>
-.nav-back{background:none;border:none;color:var(--text2);padding:14px 10px 14px 0;cursor:pointer;font-size:0.8rem;font-weight:500;display:inline-flex;align-items:center;gap:5px;transition:var(--transition);text-decoration:none;white-space:nowrap}
-.nav-back:hover{color:var(--accent)}
-</style>
 <script>(function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
 <body>
 
 <nav>
-  <a class="nav-back" href="index.html" title="All certifications">&#x2190; Portal</a>
-  <div class="nav-logo">&#x2601; AWS <span>Security Specialty</span></div>
+  <div class="nav-top">
+    <a class="nav-back" href="index.html" title="All certifications">&#x2190; Portal</a>
+    <span class="nav-title-cert">&#x2601; SCS-C02 <span class="sub">Security Specialty</span></span>
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">🌙</button>
+  </div>
   <div class="nav-tabs">
     <button class="nav-tab active" data-tab="home">&#x1F3E0; Home</button>
     <button class="nav-tab" data-tab="study">&#x1F4DA; Study</button>
     <button class="nav-tab" data-tab="quiz">&#x1F3AF; Quiz</button>
     <button class="nav-tab" data-tab="flash">&#x1F0CF; Flashcards</button>
   </div>
-  <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">🌙</button>
 </nav>
 
 <main>
